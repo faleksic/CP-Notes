@@ -107,7 +107,8 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     public Cursor getAllNotes() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + NOTE_TABLE_NAME, null );
+        Cursor res = db.rawQuery( "SELECT n." + NOTE_COLUMN_TITLE + ", n." + NOTE_COLUMN_CONTENT + ", c." + CATEGORY_COLUMN_NAME +
+                " FROM " + NOTE_TABLE_NAME + " n JOIN " + CATEGORY_TABLE_NAME + " c ON n." + NOTE_COLUMN_CATEGORY + "=c." + CATEGORY_COLUMN_ID, null );
         return res;
     }
 
