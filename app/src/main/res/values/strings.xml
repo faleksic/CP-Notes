@@ -2,5 +2,10 @@
     <string name="app_name">CP Notes</string>
     <string name="copy">Copy</string>
     <string name="title">Title</string>
+    <string name="dialog_title">Add new category</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
     <string name="content">Content</string>
+    <string name="category_name">Category name</string>
+
 </resources>

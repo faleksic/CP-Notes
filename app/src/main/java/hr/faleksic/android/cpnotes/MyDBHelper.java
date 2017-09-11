@@ -22,7 +22,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String CATEGORY_COLUMN_NAME = "name";
 
     public MyDBHelper(Context context) {
-        super(context, DATABASE_NAME , null, DATABASE_VERSION);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CATEGORY_COLUMN_NAME, name);
-        db.update(CATEGORY_TABLE_NAME, contentValues, CATEGORY_COLUMN_ID + " = ? ", new String[] { Integer.toString(id) } );
+        db.update(CATEGORY_TABLE_NAME, contentValues, CATEGORY_COLUMN_ID + " = ? ", new String[]{Integer.toString(id)});
         return true;
     }
 
@@ -81,34 +81,36 @@ public class MyDBHelper extends SQLiteOpenHelper {
         contentValues.put(NOTE_COLUMN_TITLE, title);
         contentValues.put(NOTE_COLUMN_CONTENT, content);
         contentValues.put(NOTE_COLUMN_CATEGORY, category);
-        db.update(NOTE_TABLE_NAME, contentValues, NOTE_COLUMN_ID + " = ? ", new String[] { Integer.toString(id) } );
+        db.update(NOTE_TABLE_NAME, contentValues, NOTE_COLUMN_ID + " = ? ", new String[]{Integer.toString(id)});
         return true;
     }
 
     public Cursor getCategory(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + CATEGORY_TABLE_NAME + " WHERE " +
-                CATEGORY_COLUMN_ID + "=?", new String[] { Integer.toString(id) } );
+        Cursor res = db.rawQuery("SELECT * FROM " + CATEGORY_TABLE_NAME + " WHERE " +
+                CATEGORY_COLUMN_ID + "=?", new String[]{Integer.toString(id)});
         return res;
     }
 
     public Cursor getAllCategories() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + CATEGORY_TABLE_NAME, null );
+        Cursor res = db.rawQuery("SELECT " + CATEGORY_COLUMN_NAME + ", (SELECT COUNT(*) FROM " + NOTE_TABLE_NAME
+                + " WHERE " + NOTE_COLUMN_CATEGORY + "=" + CATEGORY_TABLE_NAME + "." + CATEGORY_COLUMN_ID + ") AS count" +
+                " FROM " + CATEGORY_TABLE_NAME, null);
         return res;
     }
 
     public Cursor getNote(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "SELECT * FROM " + NOTE_TABLE_NAME + " WHERE " +
-                NOTE_COLUMN_ID + "=?", new String[] { Integer.toString(id) } );
+        Cursor res = db.rawQuery("SELECT * FROM " + NOTE_TABLE_NAME + " WHERE " +
+                NOTE_COLUMN_ID + "=?", new String[]{Integer.toString(id)});
         return res;
     }
 
     public Cursor getAllNotes() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res = db.rawQuery( "SELECT n." + NOTE_COLUMN_TITLE + ", n." + NOTE_COLUMN_CONTENT + ", c." + CATEGORY_COLUMN_NAME +
-                " FROM " + NOTE_TABLE_NAME + " n JOIN " + CATEGORY_TABLE_NAME + " c ON n." + NOTE_COLUMN_CATEGORY + "=c." + CATEGORY_COLUMN_ID, null );
+        Cursor res = db.rawQuery("SELECT n." + NOTE_COLUMN_TITLE + ", n." + NOTE_COLUMN_CONTENT + ", c." + CATEGORY_COLUMN_NAME +
+                " FROM " + NOTE_TABLE_NAME + " n JOIN " + CATEGORY_TABLE_NAME + " c ON n." + NOTE_COLUMN_CATEGORY + "=c." + CATEGORY_COLUMN_ID, null);
         return res;
     }
 
@@ -116,13 +118,13 @@ public class MyDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(CATEGORY_TABLE_NAME,
                 CATEGORY_COLUMN_ID + " = ? ",
-                new String[] { Integer.toString(id) });
+                new String[]{Integer.toString(id)});
     }
 
     public Integer deleteNote(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(NOTE_TABLE_NAME,
                 NOTE_COLUMN_ID + " = ? ",
-                new String[] { Integer.toString(id) });
+                new String[]{Integer.toString(id)});
     }
 }
