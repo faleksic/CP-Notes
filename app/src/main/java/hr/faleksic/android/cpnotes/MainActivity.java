@@ -1,5 +1,6 @@
 package hr.faleksic.android.cpnotes;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +8,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
 import com.example.android.cpnotes.R;
 
 import java.util.ArrayList;
@@ -29,7 +35,32 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.getCurrentItem();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                if(viewPager.getCurrentItem() == 0) {
+                    Intent i = new Intent(this, CreateNoteActivity.class);
+                    startActivity(i);
+                } else if(viewPager.getCurrentItem() == 1) {
+                    CategoryDialog categoryDialog = new CategoryDialog();
+                    categoryDialog.show(getFragmentManager(), "category");
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -7,6 +7,8 @@ import android.widget.EditText;
 
 import com.example.android.cpnotes.R;
 
+import java.util.Objects;
+
 public class CreateNoteActivity extends AppCompatActivity {
     private MyDBHelper myDBHelper;
     private EditText title, content;
@@ -38,7 +40,9 @@ public class CreateNoteActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        myDBHelper.insertNote(title.getText().toString(), content.getText().toString(), 1);
+        if(!Objects.equals(content.getText().toString(), "") || !Objects.equals(title.getText().toString(), "")) {
+            myDBHelper.insertNote(title.getText().toString(), content.getText().toString(), 1);
+        }
     }
 }
 

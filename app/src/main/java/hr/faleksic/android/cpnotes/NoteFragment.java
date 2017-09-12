@@ -1,12 +1,10 @@
 package hr.faleksic.android.cpnotes;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,7 +22,7 @@ public class NoteFragment extends Fragment {
     private RecyclerView recyclerView;
     private NotesAdapter notesAdapter;
     private MyDBHelper myDBHelper;
-    private FloatingActionButton floatingActionButton;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public NoteFragment() {
     }
@@ -38,14 +36,9 @@ public class NoteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_note, container, false);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        recyclerView = (RecyclerView) getActivity().findViewById(R.id.recycler_view);
-        floatingActionButton = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        View view = inflater.inflate(R.layout.fragment_note, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayoutNote);
 
         myDBHelper = new MyDBHelper(getActivity());
 
@@ -54,18 +47,28 @@ public class NoteFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        /*DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);*/
         recyclerView.setAdapter(notesAdapter);
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), CreateNoteActivity.class);
-                startActivity(i);
+            public void onRefresh() {
+                refresh();
+                swipeRefreshLayout.setRefreshing(false);
             }
-        } );
+        });
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh();
+    }
+
+    private void refresh() {
         noteList.clear();
         notesAdapter.notifyItemRangeRemoved(0, notesAdapter.getItemCount());
         prepareNoteData();
