@@ -1,12 +1,14 @@
 package hr.faleksic.android.cpnotes;
 
 public class Note {
+    private int id;
     private String title, content, category;
 
     public Note() {
     }
 
-    public Note(String title, String content, String category) {
+    public Note(int id, String title, String content, String category) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.category = category;
@@ -34,5 +36,13 @@ public class Note {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

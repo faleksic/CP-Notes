@@ -17,6 +17,8 @@ import com.example.android.cpnotes.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
+
 public class CategoryFragment extends Fragment {
 
     private List<Category> categoryList = new ArrayList<>();
@@ -79,15 +81,16 @@ public class CategoryFragment extends Fragment {
 
         Cursor cursor = myDBHelper.getAllCategories();
 
+        categoryList.add(new Category(0, "All notes", myDBHelper.countAllCategories()));
+
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
-            int count = cursor.getInt(1);
-            categoryList.add(new Category(name, count));
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            int count = cursor.getInt(2);
+            categoryList.add(new Category(id, name, count));
         }
         cursor.close();
 
         categoriesAdapter.notifyDataSetChanged();
     }
-
-
 }

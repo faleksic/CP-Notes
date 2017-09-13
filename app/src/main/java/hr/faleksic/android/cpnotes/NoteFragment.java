@@ -16,6 +16,8 @@ import com.example.android.cpnotes.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
+
 public class NoteFragment extends Fragment {
 
     private List<Note> noteList = new ArrayList<>();
@@ -47,8 +49,6 @@ public class NoteFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        /*DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);*/
         recyclerView.setAdapter(notesAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -75,21 +75,25 @@ public class NoteFragment extends Fragment {
     }
 
     private void prepareNoteData() {
-
-        Cursor cursor = myDBHelper.getAllNotes();
-
-        if(cursor.getCount() == 0) {
-            myDBHelper.insertCategory("None");
-            myDBHelper.insertNote("Title", "Content", 1);
-
+        Cursor cursor;
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null) {
+            int id = extras.getInt("id");
+            if(id > 0) {
+                cursor = myDBHelper.getAllNotesWithCategory(id);
+            } else {
+                cursor = myDBHelper.getAllNotes();
+            }
+        } else {
             cursor = myDBHelper.getAllNotes();
         }
 
         while(cursor.moveToNext()) {
-            String title = cursor.getString(0);
-            String content = cursor.getString(1);
-            String category =  cursor.getString(2);
-            noteList.add(new Note(title, content, category));
+            int id = cursor.getInt(0);
+            String title = cursor.getString(1);
+            String content = cursor.getString(2);
+            String category =  cursor.getString(3);
+            noteList.add(new Note(id, title, content, category));
         }
 
         cursor.close();

@@ -10,5 +10,9 @@
     <string name="left_parenthesis">(</string>
     <string name="right_parenthesis">)</string>
     <string name="add_item">Add item</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="category">Category</string>
+    <string name="uncategorised">Uncategorised</string>
 
 </resources>
