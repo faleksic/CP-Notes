@@ -1,5 +1,6 @@
 package hr.faleksic.android.cpnotes;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -57,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
                 } else if (viewPager.getCurrentItem() == 1) {
                     CategoryDialog categoryDialog = new CategoryDialog();
                     categoryDialog.show(getFragmentManager(), "category");
+                    categoryDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            ((CategoryFragment)getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager + ":" + viewPager.getCurrentItem())).refresh();
+                        }
+                    });
                 }
                 return true;
             default:

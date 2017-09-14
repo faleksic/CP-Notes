@@ -42,7 +42,7 @@ public class CategoryFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_category);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayoutCategory);
         myDBHelper = new MyDBHelper(getActivity());
-        categoriesAdapter = new CategoriesAdapter(categoryList);
+        categoriesAdapter = new CategoriesAdapter(categoryList, this);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -69,7 +69,7 @@ public class CategoryFragment extends Fragment {
         refresh();
     }
 
-    private void refresh() {
+    public void refresh() {
         categoryList.clear();
         categoriesAdapter.notifyItemRangeRemoved(0, categoriesAdapter.getItemCount());
         prepareCategoryData();

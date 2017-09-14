@@ -1,6 +1,8 @@
 package hr.faleksic.android.cpnotes;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,7 @@ import java.util.List;
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.MyCategoryViewHolder> {
 
     private List<Category> categoryList;
+    private CategoryFragment categoryFragment;
 
     public class MyCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public int id;
@@ -29,7 +32,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     if (id > 1) {
                         CategoryDialog categoryDialog = new CategoryDialog();
                         Bundle args = new Bundle();
@@ -37,6 +40,12 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
                         args.putInt("id", id);
                         categoryDialog.setArguments(args);
                         categoryDialog.show(((Activity) (view.getContext())).getFragmentManager(), "category");
+                        categoryDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                categoryFragment.refresh();
+                            }
+                        });
                     }
                 }
             });
@@ -50,8 +59,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
         }
     }
 
-    public CategoriesAdapter(List<Category> categoryList) {
+    public CategoriesAdapter(List<Category> categoryList, CategoryFragment fragment) {
         this.categoryList = categoryList;
+        this.categoryFragment = fragment;
     }
 
     @Override

@@ -66,7 +66,7 @@ public class NoteFragment extends Fragment {
         refresh();
     }
 
-    private void refresh() {
+    public void refresh() {
         noteList.clear();
         notesAdapter.notifyItemRangeRemoved(0, notesAdapter.getItemCount());
         prepareNoteData();
