@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name="hr.faleksic.android.cpnotes.CreateNoteActivity"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="b3fb65bde48674aab20a8731cee37bcd18758ab2" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

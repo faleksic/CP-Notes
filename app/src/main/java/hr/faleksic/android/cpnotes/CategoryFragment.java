@@ -17,8 +17,6 @@ import com.example.android.cpnotes.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.id;
-
 public class CategoryFragment extends Fragment {
 
     private List<Category> categoryList = new ArrayList<>();

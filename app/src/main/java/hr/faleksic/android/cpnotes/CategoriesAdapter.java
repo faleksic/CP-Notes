@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.android.cpnotes.R;
@@ -18,7 +17,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
 
     private List<Category> categoryList;
 
-    public class MyCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
+    public class MyCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public int id;
         public TextView name, count;
 
@@ -31,10 +30,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CategoryDialog categoryDialog = new CategoryDialog();
-                    Bundle args = new Bundle();
-                    args.putString("name", name.getText().toString());
-                    categoryDialog.show(((Activity)(view.getContext())).getFragmentManager(), "category");
+                    if (id > 1) {
+                        CategoryDialog categoryDialog = new CategoryDialog();
+                        Bundle args = new Bundle();
+                        args.putString("name", name.getText().toString());
+                        args.putInt("id", id);
+                        categoryDialog.setArguments(args);
+                        categoryDialog.show(((Activity) (view.getContext())).getFragmentManager(), "category");
+                    }
                 }
             });
         }

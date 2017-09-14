@@ -1,5 +1,6 @@
 package hr.faleksic.android.cpnotes;
 
+import android.content.ClipboardManager;
 import android.database.Cursor;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.android.cpnotes.R;
 
@@ -22,6 +25,7 @@ public class CreateNoteActivity extends AppCompatActivity {
     private int id = 0;
     private EditText title, content;
     private AutoCompleteTextView autoCompleteTextView;
+    private ImageButton pasteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,7 @@ public class CreateNoteActivity extends AppCompatActivity {
         title = (EditText) findViewById(R.id.title_edittext);
         content = (EditText) findViewById(R.id.content_edittext);
         autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_complete_category);
+        pasteButton = (ImageButton) findViewById(R.id.paste_button);
 
         Cursor cursor = myDBHelper.getAllCategories();
         ArrayList<String> countries = new ArrayList<>();
@@ -46,6 +51,13 @@ public class CreateNoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 autoCompleteTextView.showDropDown();
+            }
+        });
+
+        pasteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pasteContent();
             }
         });
 
@@ -88,6 +100,7 @@ public class CreateNoteActivity extends AppCompatActivity {
             case R.id.action_delete:
                 myDBHelper.deleteNote(id);
                 finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -100,10 +113,8 @@ public class CreateNoteActivity extends AppCompatActivity {
         return true;
     }
 
-
-
     private void saveNote() {
-        if(!Objects.equals(content.getText().toString(), "") || !Objects.equals(title.getText().toString(), "")) {
+        if(!Objects.equals(content.getText().toString(), "")) {
             String category = autoCompleteTextView.getText().toString();
             if(!Objects.equals(category, "")) {
                 if(myDBHelper.getCategoryId(category) == -1) {
@@ -117,8 +128,16 @@ public class CreateNoteActivity extends AppCompatActivity {
             } else {
                 myDBHelper.insertNote(title.getText().toString(), content.getText().toString(), 1);
             }
+        } else {
+            Toast.makeText(this, getString(R.string.note_content_empty), Toast.LENGTH_SHORT).show();
         }
         finish();
+    }
+
+    private void pasteContent() {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        content.setText(clipboard.getPrimaryClip().getItemAt(0).getText());
+        content.setSelection(content.getText().length());
     }
 }
 

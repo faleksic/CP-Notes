@@ -1,19 +1,21 @@
 package hr.faleksic.android.cpnotes;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.android.cpnotes.R;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -48,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                if(viewPager.getCurrentItem() == 0) {
+                if (viewPager.getCurrentItem() == 0) {
                     Intent i = new Intent(this, CreateNoteActivity.class);
                     startActivity(i);
-                } else if(viewPager.getCurrentItem() == 1) {
+                } else if (viewPager.getCurrentItem() == 1) {
                     CategoryDialog categoryDialog = new CategoryDialog();
                     categoryDialog.show(getFragmentManager(), "category");
                 }

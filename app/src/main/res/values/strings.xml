@@ -2,8 +2,10 @@
     <string name="app_name">CP Notes</string>
     <string name="copy">Copy</string>
     <string name="title">Title</string>
-    <string name="dialog_title">Add new category</string>
+    <string name="dialog_title_new">Add new category</string>
+    <string name="dialog_title_rename">Rename category</string>
     <string name="add">Add</string>
+    <string name="rename">Rename</string>
     <string name="cancel">Cancel</string>
     <string name="content">Content</string>
     <string name="category_name">Category name</string>
@@ -14,5 +16,11 @@
     <string name="save">Save</string>
     <string name="category">Category</string>
     <string name="uncategorised">Uncategorised</string>
-
+    <string name="category_delete_description">Button for deleting category</string>
+    <string name="category_name_empty">Category name cannot be empty!</string>
+    <string name="note_content_empty">Content cannot be empty!</string>
+    <string name="note_content_added">Content is added to clipboard!</string>
+    <string name="paste">Paste</string>
+    <string name="button_paste_description">Paste data from clipboard</string>
+    <string name="button_copy_description">Copy content to clipboard</string>
 </resources>
