@@ -1,6 +1,7 @@
 package hr.faleksic.android.cpnotes;
 
 public class Category {
+    private boolean selected = false;
     private String name;
     private int count, id;
 
@@ -11,6 +12,14 @@ public class Category {
         this.id = id;
         this.name = name;
         this.count = count;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public String getName() {

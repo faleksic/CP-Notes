@@ -23,4 +23,6 @@
     <string name="paste">Paste</string>
     <string name="button_paste_description">Paste data from clipboard</string>
     <string name="button_copy_description">Copy content to clipboard</string>
+    <string name="open_notes_with_this_category">Open notes with this category</string>
+    <string name="delete_all">Delete All</string>
 </resources>

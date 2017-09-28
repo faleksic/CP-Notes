@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,28 +24,37 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private Menu menu;
+    private NoteFragment noteFragment;
+    private CategoryFragment categoryFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Fabric.with(this, new Crashlytics());
+        //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new NoteFragment(), "Notes");
-        adapter.addFragment(new CategoryFragment(), "Categories");
+        noteFragment = new NoteFragment();
+        adapter.addFragment(noteFragment, "Notes");
+        categoryFragment = new CategoryFragment();
+        adapter.addFragment(categoryFragment, "Categories");
         viewPager.setAdapter(adapter);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.getCurrentItem();
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        this.menu = menu;
         return true;
     }
 
@@ -66,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
                 return true;
+            case R.id.action_delete_all:
+                if(categoryFragment != null) {
+                    categoryFragment.deleteAll();
+                    onSupportNavigateUp();
+                    categoryFragment.refresh();
+                }
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -98,6 +114,39 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+    }
+
+    public void changeMenu(int menuId) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(menuId, menu);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if(categoryFragment != null) {
+            categoryFragment.stopDelete();
+            menu.clear();
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.main_menu, menu);
+            if(getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+            return true;
+        }
+        return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!categoryFragment.showCheckboxes) {
+            super.onBackPressed();
+        } else {
+            onSupportNavigateUp();
         }
     }
 }

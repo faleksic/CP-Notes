@@ -4,10 +4,12 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +19,8 @@ import com.example.android.cpnotes.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryFragment extends Fragment {
-
+public class CategoryFragment extends Fragment implements View.OnLongClickListener{
+    public boolean showCheckboxes = false;
     private List<Category> categoryList = new ArrayList<>();
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -90,5 +92,33 @@ public class CategoryFragment extends Fragment {
         cursor.close();
 
         categoriesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        ((MainActivity)getActivity()).changeMenu(R.menu.delete_menu);
+        showCheckboxes = true;
+        categoriesAdapter.notifyDataSetChanged();
+        return true;
+    }
+
+    public void stopDelete() {
+        showCheckboxes = false;
+        for(Category category : categoryList) {
+            if(category.isSelected()) {
+                category.setSelected(false);
+            }
+        }
+        if(categoriesAdapter != null) {
+            categoriesAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public void deleteAll() {
+        for(Category category : categoryList) {
+            if(category.isSelected()) {
+                myDBHelper.deleteCategory(category.getId());
+            }
+        }
     }
 }

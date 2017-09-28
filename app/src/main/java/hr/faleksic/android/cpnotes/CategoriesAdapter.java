@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.android.cpnotes.R;
@@ -23,11 +24,13 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
     public class MyCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public int id;
         public TextView name, count;
+        public CheckBox checkBox;
 
         public MyCategoryViewHolder(View view) {
             super(view);
             name = (TextView) view.findViewById(R.id.name);
             count = (TextView) view.findViewById(R.id.category_count);
+            checkBox = (CheckBox) view.findViewById(R.id.delete_checkbox);
             view.findViewById(R.id.note_image).setOnClickListener(this);
 
             view.setOnClickListener(new View.OnClickListener() {
@@ -49,6 +52,8 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
                     }
                 }
             });
+
+            view.setOnLongClickListener(categoryFragment);
         }
 
         @Override
@@ -73,10 +78,24 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
 
     @Override
     public void onBindViewHolder(MyCategoryViewHolder holder, int position) {
-        Category category = categoryList.get(position);
+        final Category category = categoryList.get(position);
         holder.id = category.getId();
         holder.name.setText(category.getName());
         holder.count.setText(String.valueOf(category.getCount()));
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                category.setSelected(!category.isSelected());
+            }
+        });
+        if(!categoryFragment.showCheckboxes) {
+            holder.checkBox.setVisibility(View.GONE);
+        } else {
+            holder.checkBox.setVisibility(View.VISIBLE);
+            if(holder.checkBox.isChecked()) {
+                holder.checkBox.toggle();
+            }
+        }
     }
 
     @Override
